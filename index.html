@@ -1,0 +1,343 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Clínica Dental DentalCare - Cuidado de tu Sonrisa</title>
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        body {
+            color: #333;
+            line-height: 1.6;
+            background-color: #f8fafc;
+        }
+
+        /* Navegación */
+        .navbar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 1rem 5%;
+            background: #ffffff;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+
+        .logo {
+            font-size: 1.5rem;
+            font-weight: bold;
+            color: #0284c7;
+        }
+
+        .btn-nav {
+            background: #0284c7;
+            color: white;
+            padding: 0.6rem 1.2rem;
+            border-radius: 8px;
+            text-decoration: none;
+            font-weight: 600;
+            transition: background 0.3s;
+        }
+
+        .btn-nav:hover {
+            background: #0369a1;
+        }
+
+        /* Hero Section */
+        .hero {
+            background: linear-gradient(135deg, #e0f2fe 0%, #ffffff 100%);
+            padding: 4rem 5%;
+            text-align: center;
+        }
+
+        .hero h1 {
+            font-size: 2.5rem;
+            color: #0f172a;
+            margin-bottom: 1rem;
+        }
+
+        .hero p {
+            font-size: 1.2rem;
+            color: #475569;
+            max-width: 600px;
+            margin: 0 auto 2rem;
+        }
+
+        .btn-cta {
+            display: inline-block;
+            background: #0284c7;
+            color: white;
+            padding: 1rem 2rem;
+            border-radius: 8px;
+            font-size: 1.1rem;
+            font-weight: bold;
+            text-decoration: none;
+            box-shadow: 0 4px 12px rgba(2, 132, 199, 0.3);
+            transition: transform 0.2s, background 0.3s;
+        }
+
+        .btn-cta:hover {
+            transform: translateY(-2px);
+            background: #0369a1;
+        }
+
+        /* Servicios */
+        .services {
+            padding: 4rem 5%;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .section-title {
+            text-align: center;
+            font-size: 2rem;
+            color: #0f172a;
+            margin-bottom: 2.5rem;
+        }
+
+        .services-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+            gap: 2rem;
+        }
+
+        .service-card {
+            background: white;
+            padding: 2rem;
+            border-radius: 12px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
+            text-align: center;
+            border: 1px solid #e2e8f0;
+        }
+
+        .service-card h3 {
+            color: #0284c7;
+            margin-bottom: 0.8rem;
+        }
+
+        .service-card p {
+            font-size: 0.95rem;
+            color: #64748b;
+        }
+
+        /* Sección de Reserva de Cita */
+        .booking-section {
+            background: #ffffff;
+            padding: 4rem 5%;
+            border-top: 1px solid #e2e8f0;
+            border-bottom: 1px solid #e2e8f0;
+        }
+
+        .booking-container {
+            max-width: 600px;
+            margin: 0 auto;
+            background: #f8fafc;
+            padding: 2.5rem;
+            border-radius: 16px;
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.05);
+            border: 1px solid #e2e8f0;
+        }
+
+        .form-group {
+            margin-bottom: 1.5rem;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 0.5rem;
+            font-weight: 600;
+            color: #334155;
+        }
+
+        .form-group input, 
+        .form-group select {
+            width: 100%;
+            padding: 0.8rem;
+            border: 1px solid #cbd5e1;
+            border-radius: 8px;
+            font-size: 1rem;
+            outline: none;
+            transition: border-color 0.2s;
+        }
+
+        .form-group input:focus, 
+        .form-group select:focus {
+            border-color: #0284c7;
+        }
+
+        .btn-submit {
+            width: 100%;
+            background: #0284c7;
+            color: white;
+            padding: 1rem;
+            border: none;
+            border-radius: 8px;
+            font-size: 1.1rem;
+            font-weight: bold;
+            cursor: pointer;
+            transition: background 0.3s;
+        }
+
+        .btn-submit:hover {
+            background: #0369a1;
+        }
+
+        /* Reseñas */
+        .reviews {
+            background: #f1f5f9;
+            padding: 4rem 5%;
+        }
+
+        .reviews-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 2rem;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .review-card {
+            background: white;
+            padding: 1.5rem;
+            border-radius: 10px;
+            font-style: italic;
+            border-left: 4px solid #0284c7;
+        }
+
+        .review-card span {
+            display: block;
+            margin-top: 1rem;
+            font-weight: bold;
+            font-style: normal;
+            color: #334155;
+        }
+
+        /* Footer */
+        footer {
+            background: #0f172a;
+            color: white;
+            padding: 2rem 5%;
+            text-align: center;
+            font-size: 0.9rem;
+        }
+
+        footer p {
+            color: #94a3b8;
+            margin-top: 0.5rem;
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Navegación -->
+    <nav class="navbar">
+        <div class="logo">DentalCare</div>
+        <a href="#reserva" class="btn-nav">Pedir Cita</a>
+    </nav>
+
+    <!-- Hero Section -->
+    <section class="hero">
+        <h1>Tu Sonrisa en las Mejores Manos</h1>
+        <p>Especialistas en salud dental con la última tecnología. Primera consulta y diagnóstico gratuito.</p>
+        <a href="#reserva" class="btn-cta">Reservar Cita Online</a>
+    </section>
+
+    <!-- Servicios -->
+    <section class="services">
+        <h2 class="section-title">Nuestros Servicios</h2>
+        <div class="services-grid">
+            <div class="service-card">
+                <h3>Limpieza Dental</h3>
+                <p>Prevención y cuidado profundo para mantener tus dientes y encías sanos.</p>
+            </div>
+            <div class="service-card">
+                <h3>Ortodoncia Invisible</h3>
+                <p>Alinea tus dientes de forma discreta y cómoda sin alambres molestos.</p>
+            </div>
+            <div class="service-card">
+                <h3>Implantes Dentales</h3>
+                <p>Recupera la funcionalidad y estética de tu boca con soluciones permanentes.</p>
+            </div>
+            <div class="service-card">
+                <h3>Blanqueamiento</h3>
+                <p>Luce una sonrisa más blanca y radiante en tan solo una sesión.</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Módulo de Reserva de Cita -->
+    <section id="reserva" class="booking-section">
+        <h2 class="section-title">Reserva tu Cita Online</h2>
+        <div class="booking-container">
+            <form id="appointmentForm">
+                <div class="form-group">
+                    <label for="nombre">Nombre Completo</label>
+                    <input type="text" id="nombre" required placeholder="Ej. Juan Pérez">
+                </div>
+                <div class="form-group">
+                    <label for="telefono">Teléfono de Contacto</label>
+                    <input type="tel" id="telefono" required placeholder="Ej. 600112233">
+                </div>
+                <div class="form-group">
+                    <label for="servicio">Tratamiento o Servicio</label>
+                    <select id="servicio" required>
+                        <option value="">Selecciona un servicio...</option>
+                        <option value="Limpieza Dental">Limpieza Dental</option>
+                        <option value="Ortodoncia Invisible">Ortodoncia Invisible</option>
+                        <option value="Implantes Dentales">Implantes Dentales</option>
+                        <option value="Blanqueamiento">Blanqueamiento</option>
+                        <option value="Revisión General">Revisión General (Gratuita)</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="fecha">Fecha de la Cita</label>
+                    <input type="date" id="fecha" required>
+                </div>
+                <div class="form-group">
+                    <label for="hora">Hora Disponible</label>
+                    <select id="hora" required>
+                        <option value="">Selecciona una hora...</option>
+                        <option value="09:00">09:00 - 10:00</option>
+                        <option value="10:00">10:00 - 11:00</option>
+                        <option value="11:00">11:00 - 12:00</option>
+                        <option value="16:00">16:00 - 17:00</option>
+                        <option value="17:00">17:00 - 18:00</option>
+                        <option value="18:00">18:00 - 19:00</option>
+                    </select>
+                </div>
+                <button type="submit" class="btn-submit">Confirmar Reserva</button>
+            </form>
+        </div>
+    </section>
+
+    <!-- Reseñas -->
+    <section class="reviews">
+        <h2 class="section-title">Lo que dicen nuestros pacientes</h2>
+        <div class="reviews-grid">
+            <div class="review-card">
+                "El trato fue excelente y el tratamiento de ortodoncia impecable. Muy recomendables."
+                <span>— María García</span>
+            </div>
+            <div class="review-card">
+                "Pude pedir cita online al momento y me atendieron puntual. Una clínica muy moderna."
+                <span>— Carlos Rodríguez</span>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer>
+        <p><strong>Clínica DentalCare</strong> — Calle Principal 123</p>
+        <p>Teléfono: 910 000 000 | Horario: Lunes a Viernes de 9:00 a 20:00</p>
+    </footer>
+
+</body>
+</html>
