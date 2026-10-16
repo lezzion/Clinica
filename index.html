@@ -338,6 +338,50 @@
         <p><strong>Clínica DentalCare</strong> — Calle Principal 123</p>
         <p>Teléfono: 910 000 000 | Horario: Lunes a Viernes de 9:00 a 20:00</p>
     </footer>
+<script>
+    // Obtener referencias del formulario y campos
+    const appointmentForm = document.getElementById('appointmentForm');
+    const fechaInput = document.getElementById('fecha');
 
+    // Deshabilitar días pasados en el calendario (mínimo hoy)
+    const hoy = new Date().toISOString().split('T')[0];
+    fechaInput.setAttribute('min', hoy);
+
+    // Evento al enviar el formulario de reserva
+    appointmentForm.addEventListener('submit', (e) => {
+        e.preventDefault();
+
+        // 1. Capturar los datos introducidos por el cliente
+        const nuevaCita = {
+            id: Date.now(),
+            nombre: document.getElementById('nombre').value.trim(),
+            telefono: document.getElementById('telefono').value.trim(),
+            servicio: document.getElementById('servicio').value,
+            fecha: document.getElementById('fecha').value,
+            hora: document.getElementById('hora').value
+        };
+
+        // 2. Obtener la lista de citas que ya existen en la base de datos
+        const citasExistentes = JSON.parse(localStorage.getItem('citas_clinica')) || [];
+
+        // 3. Comprobar si ya existe una cita registrada en la misma FECHA y HORA
+        const horaOcupada = citasExistentes.some(cita => 
+            cita.fecha === nuevaCita.fecha && cita.hora === nuevaCita.hora
+        );
+
+        if (horaOcupada) {
+            alert(` Lo sentimos, el horario de las ${nuevaCita.hora} para el día ${nuevaCita.fecha} ya está reservado. Por favor, elige otra hora o fecha.`);
+            return;
+        }
+
+        // 4. Si la hora está libre, guardar la nueva cita
+        citasExistentes.push(nuevaCita);
+        localStorage.setItem('citas_clinica', JSON.stringify(citasExistentes));
+
+        // 5. Avisar al cliente y limpiar el formulario
+        alert(` ¡Cita confirmada con éxito!\n\nServicio: ${nuevaCita.servicio}\nFecha: ${nuevaCita.fecha}\nHora: ${nuevaCita.hora}\n\n¡Te esperamos en DentalCare!`);
+        appointmentForm.reset();
+    });
+</script>
 </body>
 </html>
