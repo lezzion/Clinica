@@ -317,7 +317,15 @@
             </form>
         </div>
     </section>
-
+<!-- Panel de Agenda de la Clínica -->
+    <section class="services" style="background: #ffffff; margin-top: 2rem; border-radius: 12px; padding: 2rem;">
+        <h2 class="section-title" style="margin-bottom: 1rem;">Agenda Interna de la Clínica</h2>
+        <p style="text-align: center; color: #64748b; margin-bottom: 1.5rem;">Citas programadas actualmente en el sistema:</p>
+        
+        <div id="listaCitas" style="max-width: 800px; margin: 0 auto;">
+            <!-- Aquí se cargarán dinámicamente las citas -->
+        </div>
+    </section>
     <!-- Reseñas -->
     <section class="reviews">
         <h2 class="section-title">Lo que dicen nuestros pacientes</h2>
@@ -339,19 +347,59 @@
         <p>Teléfono: 910 000 000 | Horario: Lunes a Viernes de 9:00 a 20:00</p>
     </footer>
 <script>
-    // Obtener referencias del formulario y campos
     const appointmentForm = document.getElementById('appointmentForm');
     const fechaInput = document.getElementById('fecha');
+    const listaCitasContainer = document.getElementById('listaCitas');
 
-    // Deshabilitar días pasados en el calendario (mínimo hoy)
+    // Deshabilitar días pasados
     const hoy = new Date().toISOString().split('T')[0];
     fechaInput.setAttribute('min', hoy);
 
-    // Evento al enviar el formulario de reserva
+    // Función para renderizar / mostrar las citas guardadas
+    function mostrarCitas() {
+        const citas = JSON.parse(localStorage.getItem('citas_clinica')) || [];
+        listaCitasContainer.innerHTML = '';
+
+        if (citas.length === 0) {
+            listaCitasContainer.innerHTML = '<p style="text-align:center; color:#94a3b8;">No hay citas reservadas por el momento.</p>';
+            return;
+        }
+
+        // Ordenar citas por fecha y hora
+        citas.sort((a, b) => new Date(`${a.fecha}T${a.hora}`) - new Date(`${b.fecha}T${b.hora}`));
+
+        citas.forEach(cita => {
+            const card = document.createElement('div');
+            card.style.cssText = 'background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 8px; padding: 1rem; margin-bottom: 1rem; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 0.5rem;';
+            
+            card.innerHTML = `
+                <div>
+                    <strong style="color: #0284c7; font-size: 1.1rem;">${cita.servicio}</strong><br>
+                    <span><strong>Paciente:</strong> ${cita.nombre} (${cita.telefono})</span><br>
+                    <span style="color: #475569;"><strong>Fecha/Hora:</strong> ${cita.fecha} a las ${cita.hora} hs</span>
+                </div>
+                <button onclick="eliminarCita(${cita.id})" style="background: #ef4444; color: white; border: none; padding: 0.5rem 1rem; border-radius: 6px; cursor: pointer; font-weight: bold;">
+                    Cancelar Cita
+                </button>
+            `;
+            listaCitasContainer.appendChild(card);
+        });
+    }
+
+    // Función para cancelar/eliminar cita y liberar el horario
+    window.eliminarCita = function(id) {
+        if (confirm('¿Estás seguro de que deseas cancelar esta cita? El horario quedará libre de nuevo.')) {
+            let citas = JSON.parse(localStorage.getItem('citas_clinica')) || [];
+            citas = citas.filter(cita => cita.id !== id);
+            localStorage.setItem('citas_clinica', JSON.stringify(citas));
+            mostrarCitas();
+        }
+    };
+
+    // Evento al enviar el formulario
     appointmentForm.addEventListener('submit', (e) => {
         e.preventDefault();
 
-        // 1. Capturar los datos introducidos por el cliente
         const nuevaCita = {
             id: Date.now(),
             nombre: document.getElementById('nombre').value.trim(),
@@ -361,27 +409,31 @@
             hora: document.getElementById('hora').value
         };
 
-        // 2. Obtener la lista de citas que ya existen en la base de datos
         const citasExistentes = JSON.parse(localStorage.getItem('citas_clinica')) || [];
 
-        // 3. Comprobar si ya existe una cita registrada en la misma FECHA y HORA
+        // Comprobar si la fecha y hora ya están ocupadas
         const horaOcupada = citasExistentes.some(cita => 
             cita.fecha === nuevaCita.fecha && cita.hora === nuevaCita.hora
         );
 
         if (horaOcupada) {
-            alert(` Lo sentimos, el horario de las ${nuevaCita.hora} para el día ${nuevaCita.fecha} ya está reservado. Por favor, elige otra hora o fecha.`);
+            alert(`Lo sentimos, el horario de las ${nuevaCita.hora} para el día ${nuevaCita.fecha} ya está reservado. Por favor, elige otra hora o fecha.`);
             return;
         }
 
-        // 4. Si la hora está libre, guardar la nueva cita
+        // Guardar cita
         citasExistentes.push(nuevaCita);
         localStorage.setItem('citas_clinica', JSON.stringify(citasExistentes));
 
-        // 5. Avisar al cliente y limpiar el formulario
-        alert(` ¡Cita confirmada con éxito!\n\nServicio: ${nuevaCita.servicio}\nFecha: ${nuevaCita.fecha}\nHora: ${nuevaCita.hora}\n\n¡Te esperamos en DentalCare!`);
+        alert(`¡Cita confirmada con éxito!\n\nServicio: ${nuevaCita.servicio}\nFecha: ${nuevaCita.fecha}\nHora: ${nuevaCita.hora}`);
         appointmentForm.reset();
+        
+        // Actualizar el panel de la agenda
+        mostrarCitas();
     });
+
+    // Cargar las citas existentes al abrir la página
+    mostrarCitas();
 </script>
 </body>
 </html>
